@@ -2,10 +2,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class RaceMain {
 
-    public static void main(String... args) {
+    public static void main(String... args) throws InterruptedException {
         //Executor service for creating some threads (Thread pool) - 10 in my case
         ExecutorService executor = Executors.newFixedThreadPool(10);
 
@@ -20,8 +22,11 @@ public class RaceMain {
             List<Future<Car>> carRaces = new ArrayList<>();
 
             for (int j = 0; j < 10; j++) {
-                //run 10 threads with a task (racing). Each task starts on submit()
-                carRaces.add(executor.submit(racing));
+
+                    //run 10 threads with a task (racing). Each task starts on submit()
+                    carRaces.add(executor.submit(racing));
+                    Thread.sleep(1);
+
             }
 
             //Return results from each thread (method call(Callable)) and write it to the list
